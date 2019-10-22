@@ -1,9 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ingress-admission-psp
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: ingress-admission
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ingress-admission
-  namespace: kube-system
+  namespace: ingress-admission
   labels:
     name: ingress-admission
 spec:
@@ -18,7 +30,7 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: ingress-admission
-  namespace: kube-system
+  namespace: ingress-admission
   labels:
     name: ingress-admission
 spec:
@@ -60,7 +72,7 @@ webhooks:
     clientConfig:
       service:
         name: ingress-admission
-        namespace: kube-system
+        namespace: ingress-admission
         path: "/"
       caBundle: --CA_BUNDLE--
     rules:
