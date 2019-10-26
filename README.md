@@ -27,6 +27,8 @@ To build on minikube and launch, follow these steps:
 
 That creates the image on minikube's docker daemon.  Then to launch the service:
 
+NOTE: Before you run ca-bundle.sh on MacOS, read the comments in that file and adjust accordingly
+
 * `./get-cert.sh`  <-- creates a CSR and a secret with the TLS cert and key
 * `./ca-bundle.sh` <-- places the correct ca-bundle in the service.yaml file
 * `kubectl create -f service.yaml`
