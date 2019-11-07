@@ -49,7 +49,7 @@ func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) er
 
 	for _, rule := range ingress.Spec.Rules {
 		subdomRe := regexp.MustCompile(fmt.Sprintf("^%s\\.(%s)", req.Namespace[5:], domstr))
-		pathRe := regexp.MustCompile(fmt.Sprintf("^tools\\.(%s)", domstr))
+		pathRe := regexp.MustCompile(fmt.Sprintf("(^tools\\.|^toolsbeta\\.)(%s)", domstr))
 		toolPathRe := regexp.MustCompile(fmt.Sprintf("^/%s\\b", req.Namespace[5:]))
 		logrus.Debugf("Found ingress host: %v", rule.Host)
 		if rule.Host == "" || pathRe.MatchString(rule.Host) {
