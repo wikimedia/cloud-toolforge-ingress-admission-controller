@@ -42,3 +42,18 @@ spun-up node, the last three steps are likely all that is needed to bootstrap.
 At the top level, run `go test ./...` to capture all tests.  If you need to see output
 or want to examine things more, use `go test -test.v ./...`
 
+## Deploying
+
+Since this was designed for use in [Toolforge](https://wikitech.wikimedia.org/wiki/Portal:Toolforge "Toolforge Portal"), so the instructions here focus on that.
+
+The version of docker on the builder host is very old, so the builder/scratch pattern in
+the Dockerfile won't work.
+
+* Build the container image locally and copy it to the docker-builder host (currently tools-docker-builder-06.tools.eqiad.wmflabs). `$ docker build . -t docker-registry.tools.wmflabs.org/ingress-admission:latest`
+* Then copy it over by saving it and using scp to get it on the docker-builder host `$ docker save -o saved_image.tar docker-registry.tools.wmflabs.org/ingress-admission:latest`
+* Use scp or similar to transfer saved_image.tar from your local host to the docker builder.
+* Load it into docker after copying the tar file to the builder host: `root@tools-docker-builder-06:~# docker load -i /home/bstorm/saved_image.tar`
+* Push the image to the internal repo: `root@tools-docker-builder-06:~# docker push docker-registry.tools.wmflabs.org/ingress-admission:latest`
+* On a control plane node as root (or as a cluster-admin user), with a checkout of the repo there somewhere (in a home directory is probably great), as root or admin user on Kubernetes, run `root@tools-k8s-control-1:# ./get-cert.sh`
+* Then run `root@tools-k8s-control-1:# ./ca-bundle.sh`, which will insert the right ca-bundle in the service.yaml manifest.
+* Now run `root@tools-k8s-control-1:# kubectl create -f service.yaml` to launch it in the cluster.
