@@ -78,7 +78,12 @@ webhooks:
       caBundle: --CA_BUNDLE--
     rules:
       - operations: ["CREATE","UPDATE"]
-        apiGroups: ["networking.k8s.io"]
+        apiGroups: ["networking.k8s.io", "extensions"]
         apiVersions: ["v1beta1"]
-        resources: ["ingress"]
+        resources: ["ingresses"]
     failurePolicy: Ignore
+    namespaceSelector:
+      matchExpressions:
+        - key: name
+          operator: NotIn
+          values: ["tool-fourohfour"]
