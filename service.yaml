@@ -37,7 +37,7 @@ spec:
   replicas: 2
   template:
     metadata:
-      name: ingress-admission 
+      name: ingress-admission
       labels:
         name: ingress-admission
     spec:
@@ -46,6 +46,9 @@ spec:
           image: docker-registry.tools.wmflabs.org/ingress-admission:latest
           # The following is for testing only
           # imagePullPolicy: Never
+          env:
+            - name: "DEBUG"
+              value: "false"
           resources:
             limits:
               memory: 50Mi
