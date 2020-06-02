@@ -31,7 +31,7 @@ NOTE: Before you run ca-bundle.sh on MacOS, read the comments in that file and a
 
 * `./get-cert.sh`  <-- creates a CSR and a secret with the TLS cert and key
 * `./ca-bundle.sh` <-- places the correct ca-bundle in the service.yaml file
-* `kubectl create -f service.yaml`
+* `kubectl apply -f service.yaml`
 
 As long as a suitable image can be placed where needed on toolforge, which can be done locally if
 node affinity is used or some similar mechanism to prevent it being needed on every
@@ -56,4 +56,10 @@ the Dockerfile won't work.
 * Push the image to the internal repo: `root@tools-docker-builder-06:~# docker push docker-registry.tools.wmflabs.org/ingress-admission:latest`
 * On a control plane node as root (or as a cluster-admin user), with a checkout of the repo there somewhere (in a home directory is probably great), as root or admin user on Kubernetes, run `root@tools-k8s-control-1:# ./get-cert.sh`
 * Then run `root@tools-k8s-control-1:# ./ca-bundle.sh`, which will insert the right ca-bundle in the service.yaml manifest.
-* Now run `root@tools-k8s-control-1:# kubectl create -f service.yaml` to launch it in the cluster.
+* Now run `root@tools-k8s-control-1:# kubectl apply -f service.yaml` to launch it in the cluster.
+
+## Updating the certs
+
+Certificates created with the Kubernetes API are valid for one year. When upgrading Kubernetes (or whenever necessary)
+it is wise to rotate the certs for this service. To do so simply run (as cluster admin or root@control host) `root@tools-k8s-control-1:# ./get-cert.sh`. That will recreate the cert secret. Then delete the existing pods to ensure
+that the golang web services are serving the new cert.
