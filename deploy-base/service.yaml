@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-admission
+  namespace: ingress-admission
+  labels:
+    name: ingress-admission
+spec:
+  ports:
+  - name: webhook
+    port: 443
+    targetPort: 8080
+  selector:
+    name: ingress-admission

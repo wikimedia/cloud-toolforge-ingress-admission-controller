@@ -55,8 +55,7 @@ the Dockerfile won't work.
 * Load it into docker after copying the tar file to the builder host: `root@tools-docker-builder-06:~# docker load -i /home/bstorm/saved_image.tar`
 * Push the image to the internal repo: `root@tools-docker-builder-06:~# docker push docker-registry.tools.wmflabs.org/ingress-admission:latest`
 * On a control plane node as root (or as a cluster-admin user), with a checkout of the repo there somewhere (in a home directory is probably great), as root or admin user on Kubernetes, run `root@tools-k8s-control-1:# ./get-cert.sh`
-* Then run `root@tools-k8s-control-1:# ./ca-bundle.sh`, which will insert the right ca-bundle in the service.yaml manifest.
-* Now run `root@tools-k8s-control-1:# kubectl apply -f service.yaml` to launch it in the cluster.
+* The caBundle should be set correctly in a [kustomize](https://kustomize.io/) folder. You should now just be able to run `root@tools-k8s-control-1:# kubectl -k deploys/toolforge` to deploy to tools and `root@toolsbeta-test-k8s-control-1:# kubectl -k deploys/toolsbeta` to make the deployment work.
 
 ## Updating the certs
 

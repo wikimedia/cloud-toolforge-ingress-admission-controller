@@ -1,0 +1,42 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-admission
+  namespace: ingress-admission
+  labels:
+    name: ingress-admission
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: ingress-admission
+  template:
+    metadata:
+      name: ingress-admission
+      labels:
+        name: ingress-admission
+    spec:
+      containers:
+        - name: webhook
+          image: docker-registry.tools.wmflabs.org/ingress-admission:latest
+          env:
+            - name: "DEBUG"
+              value: "false"
+          resources:
+            limits:
+              memory: 50Mi
+              cpu: 300m
+            requests:
+              memory: 50Mi
+              cpu: 300m
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: ingress-admission-certs
