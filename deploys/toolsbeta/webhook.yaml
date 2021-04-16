@@ -16,6 +16,7 @@ webhooks:
         apiVersions: ["v1beta1"]
         resources: ["ingresses"]
     failurePolicy: Ignore
+    matchPolicy: Equivalent
     namespaceSelector:
       matchExpressions:
         - key: name
