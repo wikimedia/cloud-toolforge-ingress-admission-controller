@@ -10,17 +10,17 @@ import (
 	"testing"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/api/admission/v1beta1"
+	admissionv1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
 var (
-	AdmissionRequestFail = v1beta1.AdmissionReview{
+	AdmissionRequestFail = admissionv1.AdmissionReview{
 		TypeMeta: v1.TypeMeta{
 			Kind: "AdmissionReview",
 		},
-		Request: &v1beta1.AdmissionRequest{
+		Request: &admissionv1.AdmissionRequest{
 			UID: "e911777a-c418-11e8-bbad-025000000001",
 			Kind: v1.GroupVersionKind{
 				Group: "networking.k8s.io", Version: "v1beta1", Kind: "Ingress",
@@ -56,11 +56,11 @@ var (
 			},
 		},
 	}
-	AdmissionRequestPass = v1beta1.AdmissionReview{
+	AdmissionRequestPass = admissionv1.AdmissionReview{
 		TypeMeta: v1.TypeMeta{
 			Kind: "AdmissionReview",
 		},
-		Request: &v1beta1.AdmissionRequest{
+		Request: &admissionv1.AdmissionRequest{
 			UID: "e911857d-c318-11e8-bbad-025000000001",
 			Kind: v1.GroupVersionKind{
 				Group: "networking.k8s.io", Version: "v1beta1", Kind: "Ingress",
@@ -100,14 +100,14 @@ var (
 	}
 )
 
-func decodeResponse(body io.ReadCloser) *v1beta1.AdmissionReview {
+func decodeResponse(body io.ReadCloser) *admissionv1.AdmissionReview {
 	response, _ := ioutil.ReadAll(body)
-	review := &v1beta1.AdmissionReview{}
+	review := &admissionv1.AdmissionReview{}
 	codecs.UniversalDeserializer().Decode(response, nil, review)
 	return review
 }
 
-func encodeRequest(review *v1beta1.AdmissionReview) []byte {
+func encodeRequest(review *admissionv1.AdmissionReview) []byte {
 	ret, err := json.Marshal(review)
 	if err != nil {
 		logrus.Errorln(err)

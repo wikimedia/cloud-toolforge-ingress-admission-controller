@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/api/admission/v1beta1"
+	admissionv1 "k8s.io/api/admission/v1"
 	netv1beta1 "k8s.io/api/networking/v1beta1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // IngressAdmission type is where the project is stored and the handler method is linked
@@ -19,13 +19,14 @@ type IngressAdmission struct {
 
 // HandleAdmission is the logic of the whole webhook, really.  This is where
 // the decision to allow a Kubernetes ingress update or create or not takes place.
-func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) error {
+func (ing *IngressAdmission) HandleAdmission(review *admissionv1.AdmissionReview) error {
 	// logrus.Debugln(review.Request)
 	req := review.Request
 	var ingress netv1beta1.Ingress
 	if err := json.Unmarshal(req.Object.Raw, &ingress); err != nil {
 		logrus.Errorf("Could not unmarshal raw object: %v", err)
-		review.Response = &v1beta1.AdmissionResponse{
+		review.Response = &admissionv1.AdmissionResponse{
+			UID: review.Request.UID,
 			Result: &v1.Status{
 				Message: err.Error(),
 			},
@@ -37,7 +38,8 @@ func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) er
 
 	// Whitelist kube-system
 	if req.Namespace == "kube-system" {
-		review.Response = &v1beta1.AdmissionResponse{
+		review.Response = &admissionv1.AdmissionResponse{
+			UID:     review.Request.UID,
 			Allowed: true,
 			Result: &v1.Status{
 				Message: "Welcome, admin!",
@@ -56,7 +58,8 @@ func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) er
 			for _, ingressPath := range rule.HTTP.Paths {
 				logrus.Debugf("Found ingress path: %v", ingressPath.Path)
 				if !toolPathRe.MatchString(ingressPath.Path) {
-					review.Response = &v1beta1.AdmissionResponse{
+					review.Response = &admissionv1.AdmissionResponse{
+						UID:     review.Request.UID,
 						Allowed: false,
 						Result: &v1.Status{
 							Message: "Ingress path incorrect",
@@ -66,7 +69,8 @@ func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) er
 				}
 			}
 		} else if !subdomRe.MatchString(rule.Host) {
-			review.Response = &v1beta1.AdmissionResponse{
+			review.Response = &admissionv1.AdmissionResponse{
+				UID:     review.Request.UID,
 				Allowed: false,
 				Result: &v1.Status{
 					Message: "Ingress host must be <toolname>.toolforge.org or tools.wmflabs.org/<toolname>",
@@ -76,7 +80,8 @@ func (ing *IngressAdmission) HandleAdmission(review *v1beta1.AdmissionReview) er
 		}
 	}
 
-	review.Response = &v1beta1.AdmissionResponse{
+	review.Response = &admissionv1.AdmissionResponse{
+		UID:     review.Request.UID,
 		Allowed: true,
 		Result: &v1.Status{
 			Message: "Welcome to the Toolforge!",

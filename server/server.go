@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/api/admission/v1beta1"
+	admissionv1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -20,7 +20,7 @@ var (
 
 // AdmissionController is an abstraction to work with the admission handler
 type AdmissionController interface {
-	HandleAdmission(review *v1beta1.AdmissionReview) error
+	HandleAdmission(review *admissionv1.AdmissionReview) error
 }
 
 // AdmissionControllerServer combines a decoder with an AdmissionController
@@ -35,16 +35,20 @@ func (acs *AdmissionControllerServer) ServeHTTP(w http.ResponseWriter, r *http.R
 		body = data
 	}
 	logrus.Debugln(string(body))
-	review := &v1beta1.AdmissionReview{}
+	review := &admissionv1.AdmissionReview{}
 	_, _, err := acs.Decoder.Decode(body, nil, review)
 	if err != nil {
 		logrus.Errorln("Can't decode request", err)
 	}
 	acs.AdmissionController.HandleAdmission(review)
 	responseInBytes, err := json.Marshal(review)
+	if err != nil {
+		logrus.Errorln("Failed to convert response to JSON", err)
+	}
 
+	w.Header().Set("Content-Type", "application/json")
 	if _, err := w.Write(responseInBytes); err != nil {
-		logrus.Errorln(err)
+		logrus.Errorln("Failed to write response", err)
 	}
 }
 
