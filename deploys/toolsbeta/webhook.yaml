@@ -20,4 +20,4 @@ webhooks:
       matchExpressions:
         - key: name
           operator: NotIn
-          values: ["tool-fourohfour", "ingress-nginx-jobs"]
+          values: ["tool-fourohfour"]
