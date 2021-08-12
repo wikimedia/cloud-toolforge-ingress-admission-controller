@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gerrit.wikimedia.org/labs/tools/registry-admission-webhook/server"
+	"gerrit.wikimedia.org/cloud/toolforge/ingress-admission-controller/server"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )

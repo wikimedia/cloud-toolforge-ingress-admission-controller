@@ -1,4 +1,4 @@
-module gerrit.wikimedia.org/labs/tools/registry-admission-webhook
+module gerrit.wikimedia.org/cloud/toolforge/ingress-admission-controller
 
 go 1.12
 
