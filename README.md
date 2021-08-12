@@ -49,10 +49,7 @@ Since this was designed for use in [Toolforge](https://wikitech.wikimedia.org/wi
 The version of docker on the builder host is very old, so the builder/scratch pattern in
 the Dockerfile won't work.
 
-* Build the container image locally and copy it to the docker-builder host (currently tools-docker-builder-06.tools.eqiad.wmflabs). `$ docker build . -t docker-registry.tools.wmflabs.org/ingress-admission:latest`
-* Then copy it over by saving it and using scp to get it on the docker-builder host `$ docker save -o saved_image.tar docker-registry.tools.wmflabs.org/ingress-admission:latest`
-* Use scp or similar to transfer saved_image.tar from your local host to the docker builder.
-* Load it into docker after copying the tar file to the builder host: `root@tools-docker-builder-06:~# docker load -i /home/bstorm/saved_image.tar`
+* Build the container image on the docker image host (currently tools-docker-imagebuilder-01.tools.eqiad1.wikimedia.cloud). `$ docker build . -t docker-registry.tools.wmflabs.org/ingress-admission:latest`
 * Push the image to the internal repo: `root@tools-docker-builder-06:~# docker push docker-registry.tools.wmflabs.org/ingress-admission:latest`
 * On a control plane node as root (or as a cluster-admin user), with a checkout of the repo there somewhere (in a home directory is probably great), as root or admin user on Kubernetes, run `root@tools-k8s-control-1:# ./get-cert.sh`
 * The caBundle should be set correctly in a [kustomize](https://kustomize.io/) folder. You should now just be able to run `root@tools-k8s-control-1:# kubectl -k deploys/toolforge` to deploy to tools and `root@toolsbeta-test-k8s-control-1:# kubectl -k deploys/toolsbeta` to make the deployment work.
