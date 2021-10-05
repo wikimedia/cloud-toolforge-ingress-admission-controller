@@ -11,7 +11,7 @@ type Config struct {
 	ListenOn string   `default:"0.0.0.0:8080"`
 	TLSCert  string   `default:"/etc/webhook/certs/cert.pem"`
 	TLSKey   string   `default:"/etc/webhook/certs/key.pem"`
-	Domains  []string `default:"toolforge.org,wmflabs.org,wmcloud.org,toolsbeta.wmflabs.org,toolsbeta.wmcloud.org"`
+	Domains  []string `default:"toolforge.org,toolsbeta.wmflabs.org,toolsbeta.wmcloud.org"`
 	Debug    bool     `default:"true"`
 }
 

@@ -47,33 +47,18 @@ func (ing *IngressAdmission) HandleAdmission(review *admissionv1.AdmissionReview
 		}
 		return nil
 	}
+
 	domstr := strings.Join(ing.Domains, "|")
+	subdomRe := regexp.MustCompile(fmt.Sprintf("^%s\\.(%s)", req.Namespace[5:], domstr))
 
 	for _, rule := range ingress.Spec.Rules {
-		subdomRe := regexp.MustCompile(fmt.Sprintf("^%s\\.(%s)", req.Namespace[5:], domstr))
-		pathRe := regexp.MustCompile(fmt.Sprintf("(^tools\\.|^toolsbeta\\.)(%s)", domstr))
-		toolPathRe := regexp.MustCompile(fmt.Sprintf("^/%s\\b", req.Namespace[5:]))
 		logrus.Debugf("Found ingress host: %v", rule.Host)
-		if rule.Host == "" || pathRe.MatchString(rule.Host) {
-			for _, ingressPath := range rule.HTTP.Paths {
-				logrus.Debugf("Found ingress path: %v", ingressPath.Path)
-				if !toolPathRe.MatchString(ingressPath.Path) {
-					review.Response = &admissionv1.AdmissionResponse{
-						UID:     review.Request.UID,
-						Allowed: false,
-						Result: &v1.Status{
-							Message: "Ingress path incorrect",
-						},
-					}
-					return nil
-				}
-			}
-		} else if !subdomRe.MatchString(rule.Host) {
+		if !subdomRe.MatchString(rule.Host) {
 			review.Response = &admissionv1.AdmissionResponse{
 				UID:     review.Request.UID,
 				Allowed: false,
 				Result: &v1.Status{
-					Message: "Ingress host must be <toolname>.toolforge.org or tools.wmflabs.org/<toolname>",
+					Message: "Ingress host must be <toolname>.toolforge.org",
 				},
 			}
 			return nil
@@ -84,7 +69,7 @@ func (ing *IngressAdmission) HandleAdmission(review *admissionv1.AdmissionReview
 		UID:     review.Request.UID,
 		Allowed: true,
 		Result: &v1.Status{
-			Message: "Welcome to the Toolforge!",
+			Message: "Welcome to Toolforge!",
 		},
 	}
 	return nil

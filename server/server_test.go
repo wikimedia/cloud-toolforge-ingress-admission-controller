@@ -38,7 +38,7 @@ var (
 					"spec": {
 					    "rules": [
 						{
-						    "host": "tool1.wmflabs.org",
+						    "host": "tool1.toolforge.org",
 						    "http": {
 							"paths": [
 							    {
@@ -80,7 +80,7 @@ var (
 					"spec": {
 					    "rules": [
 						{
-						    "host": "tool2.wmflabs.org",
+						    "host": "tool2.toolforge.org",
 						    "http": {
 							"paths": [
 							    {
