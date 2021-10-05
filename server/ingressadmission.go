@@ -8,7 +8,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	admissionv1 "k8s.io/api/admission/v1"
-	netv1beta1 "k8s.io/api/networking/v1beta1"
+	netv1 "k8s.io/api/networking/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -22,7 +22,7 @@ type IngressAdmission struct {
 func (ing *IngressAdmission) HandleAdmission(review *admissionv1.AdmissionReview) error {
 	// logrus.Debugln(review.Request)
 	req := review.Request
-	var ingress netv1beta1.Ingress
+	var ingress netv1.Ingress
 	if err := json.Unmarshal(req.Object.Raw, &ingress); err != nil {
 		logrus.Errorf("Could not unmarshal raw object: %v", err)
 		review.Response = &admissionv1.AdmissionResponse{

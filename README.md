@@ -2,8 +2,7 @@
 
 This is a [Kubernetes Admission Validation Webhook](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#what-are-admission-webhooks) deployed to check that
 users are not setting ingress values that could interfere with other users.  Since the webhook will compile with the versions it uses, it will work
-as long as the admission v1beta1 API is valid. When that changes, this webhook should
-begin to consume the new admission/v1 API whenever it happens.
+as long as the admission v1 API is valid.
 
 ## Use and development
 

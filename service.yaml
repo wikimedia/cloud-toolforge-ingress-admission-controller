@@ -85,7 +85,7 @@ webhooks:
     rules:
       - operations: ["CREATE","UPDATE"]
         apiGroups: ["networking.k8s.io", "extensions"]
-        apiVersions: ["v1beta1"]
+        apiVersions: ["v1"]
         resources: ["ingresses"]
     failurePolicy: Ignore
     matchPolicy: Equivalent

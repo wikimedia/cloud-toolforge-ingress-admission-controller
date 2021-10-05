@@ -23,13 +23,13 @@ var (
 		Request: &admissionv1.AdmissionRequest{
 			UID: "e911777a-c418-11e8-bbad-025000000001",
 			Kind: v1.GroupVersionKind{
-				Group: "networking.k8s.io", Version: "v1beta1", Kind: "Ingress",
+				Group: "networking.k8s.io", Version: "v1", Kind: "Ingress",
 			},
 			Namespace: "tool-tool2",
 			Operation: "CREATE",
 			Object: runtime.RawExtension{
 				Raw: []byte(`{
-					"apiVersion": "networking.k8s.io/v1beta1",
+					"apiVersion": "networking.k8s.io/v1",
 					"kind": "Ingress",
 					"metadata": {
 					    "name": "tool2-ingress",
@@ -63,14 +63,14 @@ var (
 		Request: &admissionv1.AdmissionRequest{
 			UID: "e911857d-c318-11e8-bbad-025000000001",
 			Kind: v1.GroupVersionKind{
-				Group: "networking.k8s.io", Version: "v1beta1", Kind: "Ingress",
+				Group: "networking.k8s.io", Version: "v1", Kind: "Ingress",
 			},
 			Operation: "CREATE",
 			Namespace: "tool-tool2",
 			Object: runtime.RawExtension{
 				Raw: []byte(`{
 					"kind": "Ingress",
-					"apiVersion": "networking.k8s.io/v1beta1",
+					"apiVersion": "networking.k8s.io/v1",
 					"metadata": {
 					    "name": "tool2-ingress",
 					    "namespace": "tool-tool2",
@@ -85,8 +85,12 @@ var (
 							"paths": [
 							    {
 								"backend": {
-								    "serviceName": "tool2-svc",
-								    "servicePort": "8081"
+								    "service": {
+										"name": "tool2-svc",
+										"port": {
+											"number": 8081
+										}
+									}
 								}
 							    }
 							]
