@@ -1,4 +1,4 @@
-FROM golang:1.12-stretch as builder
+FROM golang:1.15-buster as builder
 
 RUN apt-get update && apt-get install git && apt-get install ca-certificates
 

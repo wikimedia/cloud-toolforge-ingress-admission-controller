@@ -2,7 +2,7 @@ version: v4
 
 variants:
   build:
-    base: docker-registry.wikimedia.org/golang:latest
+    base: docker-registry.wikimedia.org/golang1.15:latest
     apt: { packages: [ca-certificates, g++, gcc, git] }
     builder:
       requirements: [go.mod, go.sum]
