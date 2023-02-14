@@ -9,8 +9,8 @@ import (
 // Config is the general configuration of the webhook via env variables
 type Config struct {
 	ListenOn string   `default:"0.0.0.0:8080"`
-	TLSCert  string   `default:"/etc/webhook/certs/cert.pem"`
-	TLSKey   string   `default:"/etc/webhook/certs/key.pem"`
+	TLSCert  string   `default:"/etc/webhook/certs/tls.crt"`
+	TLSKey   string   `default:"/etc/webhook/certs/tls.key"`
 	Domains  []string `default:"toolforge.org,toolsbeta.wmflabs.org,toolsbeta.wmcloud.org"`
 	Debug    bool     `default:"true"`
 }

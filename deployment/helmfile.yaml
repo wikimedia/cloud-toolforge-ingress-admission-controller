@@ -7,7 +7,6 @@ releases:
 
     values:
       - ./values/{{ .Environment.Name }}.yaml
-      - ./values/ca-bundle.yaml  # for the local ca bundle
 
 # Specify an environment for each project.
 environments:

@@ -1,3 +1,2 @@
 *.o
 .vscode
-/deployment/values/ca-bundle.yaml

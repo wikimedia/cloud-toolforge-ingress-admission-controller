@@ -2,6 +2,8 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: ingress-admission
+  annotations:
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/{{ .Values.webhook.secretName }}"
 webhooks:
   - name: ingress-admission.tools.wmcloud.org
     clientConfig:
@@ -9,7 +11,7 @@ webhooks:
         name: ingress-admission
         namespace: ingress-admission
         path: "/"
-      caBundle: "{{ .Values.webhook.caBundle }}"
+      caBundle: ""
     rules:
       - operations: ["CREATE","UPDATE"]
         apiGroups: ["networking.k8s.io"]

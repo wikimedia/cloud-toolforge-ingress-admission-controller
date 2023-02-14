@@ -14,16 +14,6 @@ if [ -z "$DEPLOY_ENVIRONMENT" ]; then
 	DEPLOY_ENVIRONMENT="$PROJECT"
 fi
 
-kubectl create namespace ingress-admission --dry-run=client -o yaml | kubectl apply -f -
-
-if [ "$DEPLOY_ENVIRONMENT" = "local" ]; then
-	./deployment/utils/ca-bundle.sh
-else
-	touch ./deployment/values/ca-bundle.yaml
-fi
-
-./deployment/utils/get-cert.sh
-
 # use -i (interactive) to ask for confirmation for changing
 # live cluster state if stdin is a tty
 if [ -t 0 ]; then
