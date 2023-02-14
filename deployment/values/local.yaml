@@ -1,0 +1,10 @@
+# this is for local development
+
+image:
+  name: ingress-admission
+  tag: test
+  pullPolicy: Never
+
+replicas: 1
+
+debug: true

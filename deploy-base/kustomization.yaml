@@ -1,7 +1,0 @@
-commonLabels:
-  name: ingress-admission
-resources:
-- namespace.yaml
-- service.yaml
-- rbac.yaml
-- deployment.yaml

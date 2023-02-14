@@ -1,6 +1,5 @@
 #!/bin/bash
 title="ingress-admission"
-kubectl create namespace ingress-admission || true
 
 csrName=${title}.${title}
 tmpdir=$(mktemp -d)
