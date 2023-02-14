@@ -16,6 +16,6 @@ resources:
 webhook:
   secretName: ingress-admission-certs
   excludeNamespaces: ["tool-fourohfour"]
-  failurePolicy: Ignore  # TODO: T284311
+  failurePolicy: Fail
 
 debug: false
