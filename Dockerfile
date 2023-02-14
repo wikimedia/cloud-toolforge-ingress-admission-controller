@@ -4,6 +4,11 @@ RUN apt-get update && apt-get install git && apt-get install ca-certificates
 
 WORKDIR /validation-admission-controllers-go
 
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
 COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o /go/bin/validation-admission-controllers-go
