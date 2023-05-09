@@ -25,6 +25,8 @@ spec:
           env:
             - name: "DEBUG"
               value: "{{ .Values.debug }}"
+            - name: "DOMAINS"
+              value: "{{ .Values.domains | join "," }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

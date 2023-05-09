@@ -19,3 +19,5 @@ webhook:
   failurePolicy: Fail
 
 debug: false
+domains:
+  - toolforge.org
